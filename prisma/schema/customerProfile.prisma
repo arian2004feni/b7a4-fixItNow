@@ -1,0 +1,22 @@
+// prisma/schema/profile.prisma
+
+model CustomerProfile {
+  id        String   @id @default(cuid())
+  profilePhoto String?
+  bio       String?
+  location  String?
+  mobileNumber String?
+
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  
+  // customerBookings  Booking[]      @relation("CustomerBookings")
+  // reviewsGiven      Review[]       @relation("CustomerReviews")
+  // payments          Payment[]      @relation("CustomerPayments")
+
+  @@map("customerProfiles")
+}
