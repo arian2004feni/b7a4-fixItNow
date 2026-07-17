@@ -4,6 +4,8 @@ import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { LoginUserPayload, RegisterUserPayload } from "./auth.interface";
 import { Prisma } from "../../../generated/prisma/client";
+import jwt, { SignOptions } from "jsonwebtoken";
+import { jwtUtils } from "../../utils/jwt";
 
 const signInUser = async (payload: RegisterUserPayload) => {
   const { name, email, password, role } = payload;
@@ -74,13 +76,31 @@ const loginUser = async (payload: LoginUserPayload) => {
     },
   });
 
-  const isPasswordMatched = await bcrypt.compare(password, user.password)
+  const isPasswordMatched = await bcrypt.compare(password, user.password);
 
-  if(!isPasswordMatched){
-    throw new Error("Password is Incorrect")
+  if (!isPasswordMatched) {
+    throw new Error("Password is Incorrect");
   }
 
-  return user;
+  const jwtPayload = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
+
+  const accessToken = jwtUtils.createToken(
+    jwtPayload,
+    config.jwt_access_secret,
+    config.jwt_access_expiration as SignOptions,
+  );
+  const refreshToken = jwtUtils.createToken(
+    jwtPayload,
+    config.jwt_refresh_secret,
+    config.jwt_refresh_expiration as SignOptions,
+  );
+
+  return { accessToken, refreshToken };
 };
 
 export const authService = { signInUser, loginUser };
