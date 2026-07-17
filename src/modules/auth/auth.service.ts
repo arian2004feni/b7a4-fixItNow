@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { Role } from "../../../generated/prisma/enums";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
-import { RegisterUserPayload } from "./auth.interface";
+import { LoginUserPayload, RegisterUserPayload } from "./auth.interface";
 import { Prisma } from "../../../generated/prisma/client";
 
 const signInUser = async (payload: RegisterUserPayload) => {
@@ -65,4 +65,22 @@ const signInUser = async (payload: RegisterUserPayload) => {
   return user;
 };
 
-export { signInUser };
+const loginUser = async (payload: LoginUserPayload) => {
+  const { email, password } = payload;
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      email,
+    },
+  });
+
+  const isPasswordMatched = await bcrypt.compare(password, user.password)
+
+  if(!isPasswordMatched){
+    throw new Error("Password is Incorrect")
+  }
+
+  return user;
+};
+
+export const authService = { signInUser, loginUser };
