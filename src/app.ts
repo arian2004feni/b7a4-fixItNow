@@ -2,7 +2,7 @@ import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import config from "./config";
 import cookieParser from "cookie-parser";
-import { userRouter } from "./modules/auth/auth.route";
+import { authRouter } from "./modules/auth/auth.route";
 
 const app: Application = express();
 
@@ -21,6 +21,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello, World!");
 });
 
-app.use("/api/auth", userRouter);
+app.use("/api/auth", authRouter);
 
 export default app;

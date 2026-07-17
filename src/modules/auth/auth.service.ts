@@ -5,7 +5,7 @@ import { prisma } from "../../lib/prisma";
 import { RegisterUserPayload } from "./auth.interface";
 import { Prisma } from "../../../generated/prisma/client";
 
-const registerUserInToDb = async (payload: RegisterUserPayload) => {
+const signInUser = async (payload: RegisterUserPayload) => {
   const { name, email, password, role } = payload;
 
   if (role && !Object.values(Role).includes(role)) {
@@ -65,4 +65,4 @@ const registerUserInToDb = async (payload: RegisterUserPayload) => {
   return user;
 };
 
-export { registerUserInToDb };
+export { signInUser };

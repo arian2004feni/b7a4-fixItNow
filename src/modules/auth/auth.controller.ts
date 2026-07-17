@@ -1,28 +1,23 @@
-import { Request, Response } from "express";
-import { registerUserInToDb } from "./auth.service";
+import { NextFunction, Request, Response } from "express";
+import { signInUser } from "./auth.service";
 import httpStatus from "http-status-codes";
+import { sendResponse } from "../../utils/sendResponse";
+import { catchAsync } from "../../utils/catchAsync";
 
-const register = async (req: Request, res: Response) => {
-  try {
+const register = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
 
-    const user = await registerUserInToDb(payload);
+    const user = await signInUser(payload);
 
-    res.status(httpStatus.CREATED).json({
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
       message: "User registered successfully",
-      data: user,
+      data: { user },
     });
-  } catch (error) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "failed to register user",
-      error: (error as Error).message,
-    });
-  }
-};
+  },
+);
 
 export const authController = {
   register,

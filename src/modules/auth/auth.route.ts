@@ -5,4 +5,4 @@ const router = Router();
 
 router.post("/register", authController.register);
 
-export const userRouter = router;
+export const authRouter = router;
