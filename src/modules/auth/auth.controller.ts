@@ -3,6 +3,9 @@ import httpStatus from "http-status-codes";
 import { sendResponse } from "../../utils/sendResponse";
 import { catchAsync } from "../../utils/catchAsync";
 import { authService } from "./auth.service";
+import jwt from "jsonwebtoken";
+import config from "../../config";
+import { jwtUtils } from "../../utils/jwt";
 
 const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -48,7 +51,32 @@ const login = catchAsync(
   },
 );
 
+const getMyProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { accessToken } = req.cookies;
+
+    const veryfiedToken = jwtUtils.verifyToken(
+      accessToken,
+      config.jwt_access_secret,
+    );
+
+    if (typeof veryfiedToken === "string") {
+      throw new Error("invalid token");
+    }
+
+    const profile = await authService.getMyProfileFromDB(veryfiedToken.id);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "user profile fetched successfully",
+      data: { profile },
+    });
+  },
+);
+
 export const authController = {
   register,
   login,
+  getMyProfile,
 };
