@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
-import { Role } from "../../../generated/prisma/enums";
+import { Role, UserStatus } from "../../../generated/prisma/enums";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { LoginUserPayload, RegisterUserPayload } from "./auth.interface";
 import { Prisma } from "../../../generated/prisma/client";
-import jwt, { SignOptions } from "jsonwebtoken";
+import { SignOptions } from "jsonwebtoken";
 import { jwtUtils } from "../../utils/jwt";
 
 const signInUser = async (payload: RegisterUserPayload) => {
@@ -75,6 +75,10 @@ const loginUser = async (payload: LoginUserPayload) => {
       email,
     },
   });
+
+  if (user.status === UserStatus.BANNED) {
+    throw new Error("Your account has been blocked. Please contact support.");
+  }
 
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 
