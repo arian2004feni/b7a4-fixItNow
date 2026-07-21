@@ -3,6 +3,7 @@ import cors from "cors";
 import config from "./config";
 import cookieParser from "cookie-parser";
 import { authRouter } from "./modules/auth/auth.route";
+import { adminRouter } from "./modules/admin/admin.route";
 
 const app: Application = express();
 
@@ -22,5 +23,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
 
 export default app;
