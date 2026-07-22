@@ -5,6 +5,16 @@ import { Role } from "../../../generated/prisma/enums";
 
 const router = Router();
 
-router.put("/profile", auth(Role.TECHNICIAN), technicianController.updateTechnicianProfile)
+router.put(
+  "/profile",
+  auth(Role.TECHNICIAN),
+  technicianController.updateTechnicianProfile,
+);
+
+router.put(
+  "/availability",
+  auth(Role.TECHNICIAN),
+  technicianController.updateTechnicianAvailabilitySlots,
+);
 
 export const technicianRouter = router;

@@ -1,5 +1,8 @@
 import { prisma } from "../../lib/prisma";
-import { IUpdateTechnicianProfile } from "./technician.interface";
+import {
+  IUpdateTechnicianAvailabilitySlots,
+  IUpdateTechnicianProfile,
+} from "./technician.interface";
 
 const updateTechnicianProfileDB = async (
   userId: string,
@@ -21,12 +24,44 @@ const updateTechnicianProfileDB = async (
     include: {
       availabilitySlots: true,
       services: true,
-    }
+    },
   });
 
   return updatedTechnician;
 };
 
+const updateTechnicianAvailabilitySlotsDB = async (
+  userId: string,
+  payload: IUpdateTechnicianAvailabilitySlots,
+) => {
+  const technician = await prisma.technicianProfile.findUniqueOrThrow({
+    where: { userId: userId },
+  });
+
+  await prisma.$transaction(async (tx) => {
+    await tx.availabilitySlots.deleteMany({
+      where: { technicianId: technician.id },
+    });
+
+    await tx.availabilitySlots.createMany({
+      data: payload.availability.map((i) => ({
+        technicianId: technician.id,
+        dayOfWeek: i.dayOfWeek,
+        startTime: i.startTime,
+        endTime: i.endTime,
+      })),
+    });
+  });
+
+  return prisma.availabilitySlots.findMany({
+    where: {
+      technicianId: technician.id,
+    },
+    orderBy: { dayOfWeek: "asc" },
+  });
+};
+
 export const technicianServices = {
   updateTechnicianProfileDB,
+  updateTechnicianAvailabilitySlotsDB,
 };

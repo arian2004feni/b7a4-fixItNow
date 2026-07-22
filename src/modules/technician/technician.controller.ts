@@ -9,7 +9,10 @@ const updateTechnicianProfile = catchAsync(
     const payload = req.body;
 
     const technicianProfile =
-      await technicianServices.updateTechnicianProfileDB(req.user?.id as string, payload);
+      await technicianServices.updateTechnicianProfileDB(
+        req.user?.id as string,
+        payload,
+      );
 
     sendResponse(res, {
       success: true,
@@ -20,6 +23,24 @@ const updateTechnicianProfile = catchAsync(
   },
 );
 
+const updateTechnicianAvailabilitySlots = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const availabilitySlots =
+      await technicianServices.updateTechnicianAvailabilitySlotsDB(
+        req.user?.id as string,
+        req.body,
+      );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Availability Slots successfully Updated",
+      data: availabilitySlots,
+    });
+  },
+);
+
 export const technicianController = {
   updateTechnicianProfile,
+  updateTechnicianAvailabilitySlots,
 };
