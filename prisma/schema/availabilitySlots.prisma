@@ -11,6 +11,7 @@ model AvailabilitySlots {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([technicianId, dayOfWeek])
   @@index([technicianId])
   @@map("availabilitySlots")
 }
