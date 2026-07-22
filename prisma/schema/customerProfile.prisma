@@ -14,7 +14,7 @@ model CustomerProfile {
   updatedAt DateTime @updatedAt
 
   
-  // customerBookings  Booking[]      @relation("CustomerBookings")
+  customerBookings  Booking[]
   // reviewsGiven      Review[]       @relation("CustomerReviews")
   // payments          Payment[]      @relation("CustomerPayments")
 

@@ -1,0 +1,28 @@
+model Booking{
+  id String @id @default(uuid())
+
+  customerId String
+  customerProfile CustomerProfile @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  technicianId String
+  technicianProfile TechnicianProfile @relation(fields: [technicianId], references: [id])
+
+  serviceId String
+  service Service @relation(fields: [serviceId], references: [id])
+
+  timeSlotId String
+  timeSlot AvailabilitySlots @relation(fields: [timeSlotId], references: [id])
+
+  status BookingStatus @default(REQUESTED)
+  note String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId])
+  @@index([technicianId])
+  @@index([serviceId])
+  @@index([status])
+
+  @@map("bookings")
+}
