@@ -1,4 +1,4 @@
-import { DayOfWeek } from "../../../generated/prisma/enums";
+import { BookingStatus, DayOfWeek } from "../../../generated/prisma/enums";
 
 export interface IUpdateTechnicianProfile {
   profilePhoto: string;
@@ -10,10 +10,14 @@ export interface IUpdateTechnicianProfile {
 
 export interface IAvailabilitySlot {
   dayOfWeek: DayOfWeek;
-  startTime: string; 
+  startTime: string;
   endTime: string;
 }
 
 export interface IUpdateTechnicianAvailabilitySlots {
   availability: IAvailabilitySlot[];
+}
+
+export interface IUpdateBookingStatus {
+  status: BookingStatus;
 }

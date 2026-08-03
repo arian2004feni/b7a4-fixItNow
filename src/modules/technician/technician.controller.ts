@@ -40,7 +40,46 @@ const updateTechnicianAvailabilitySlots = catchAsync(
   },
 );
 
+const getTechnicianBookings = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+
+    const data = await technicianServices.getTechnicianBookings(
+      userId as string,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "successfully retreived bookings",
+      data
+    })
+  },
+);
+
+const updateBookingStatus = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const bookingId = req.params.id;
+    const userId = req.user?.id;
+
+    const result = await technicianServices.updateBookingStatus(
+      bookingId as string,
+      userId as string,
+      req.body,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: `Booking ${req.body.status.toLowerCase()} successfully`,
+      data: result,
+    });
+  },
+);
+
 export const technicianController = {
   updateTechnicianProfile,
   updateTechnicianAvailabilitySlots,
+  getTechnicianBookings,
+  updateBookingStatus,
 };
