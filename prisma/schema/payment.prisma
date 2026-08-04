@@ -1,0 +1,11 @@
+model Payment {
+  id String @id @default(uuid())
+
+  bookingId String @unique
+  bookings Booking @relation(fields: [bookingId], references: [id])
+
+  status PaymentStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
