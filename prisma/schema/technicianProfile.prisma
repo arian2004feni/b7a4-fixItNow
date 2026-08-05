@@ -17,7 +17,7 @@ model TechnicianProfile {
   services        Service[]
   availabilitySlots  AvailabilitySlots[]
   bookings        Booking[]
-  // reviewsReceived Review[]  @relation("TechnicianReviews")
+  reviewsReceived Review[]
 
   @@map("technicianProfiles")
 }

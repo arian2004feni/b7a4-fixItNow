@@ -15,8 +15,7 @@ model CustomerProfile {
 
   
   customerBookings  Booking[]
-  // reviewsGiven      Review[]       @relation("CustomerReviews")
-  // payments          Payment[]      @relation("CustomerPayments")
+  reviewsGiven Review[]
 
   @@map("customerProfiles")
 }
