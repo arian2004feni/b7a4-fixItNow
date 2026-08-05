@@ -11,6 +11,8 @@ import { paymentRouter } from "./modules/payment/payment.route";
 
 const app: Application = express();
 
+app.post("/api/payments/confirm", express.raw({ type: "application/json" }));
+
 app.use(
   cors({
     origin: config.app_url,

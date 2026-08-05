@@ -1,10 +1,14 @@
-import { BookingStatus } from "../../../generated/prisma/enums";
+import { BookingStatus, PaymentStatus } from "../../../generated/prisma/enums";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import stripe from "../../lib/stripe";
 import { ICreatePaymentPayload } from "./payment.interface";
+import { handleCheckoutCompleted } from "./payment.utils";
 
-const createPayment = async (userId: string, payload: ICreatePaymentPayload) => {
+const createPayment = async (
+  userId: string,
+  payload: ICreatePaymentPayload,
+) => {
   const { bookingId } = payload;
 
   const customer = await prisma.customerProfile.findUniqueOrThrow({
@@ -76,6 +80,39 @@ const createPayment = async (userId: string, payload: ICreatePaymentPayload) => 
   return { checkOutUrl: session.url };
 };
 
+const handleWebhook = async (payload: Buffer, signature: string) => {
+  const endpointSecret = config.stripe_webhook_secret;
+
+  const event = stripe.webhooks.constructEvent(
+    payload,
+    signature,
+    endpointSecret,
+  );
+  const session = event.data.object as {
+    id: string;
+    metadata?: { bookingId?: string };
+  };
+  const bookingId = session.metadata?.bookingId;
+
+  if (bookingId) {
+    if (event.type === "checkout.session.completed") {
+      await handleCheckoutCompleted(event.data.object);
+    } else if (
+      event.type === "checkout.session.expired" ||
+      event.type === "checkout.session.async_payment_failed"
+    ) {
+      await prisma.payment.updateMany({
+        where: { bookingId, status: PaymentStatus.PENDING },
+        data: { status: PaymentStatus.FAILED },
+      });
+    }
+  }
+
+  // always 200 once the signature checks out, otherwise stripe retries forever
+  // res.json({ received: true });
+};
+
 export const paymentService = {
   createPayment,
+  handleWebhook,
 };

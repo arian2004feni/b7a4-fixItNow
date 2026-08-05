@@ -19,6 +19,22 @@ const createPayment = catchAsync(
   },
 );
 
+const webhook = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const event = req.body as Buffer;
+    const signature = req.headers["stripe-signature"];
+
+    await paymentService.handleWebhook(event, signature as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "webhook triggered successfully",
+    });
+  },
+);
+
 export const paymentController = {
   createPayment,
+  webhook,
 };
