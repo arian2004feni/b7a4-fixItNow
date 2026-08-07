@@ -228,6 +228,21 @@ const getAllTechnicians = async (query: IGetAllTechnicianQuery) => {
   };
 };
 
+const getSingleTechnician = async (id: string) => {
+  const technician = await prisma.technicianProfile.findUniqueOrThrow({
+    where: {
+      id,
+    },
+    include: {
+      availabilitySlots: true,
+      reviewsReceived: true,
+      services: true,
+    },
+  });
+
+  return technician;
+};
+
 const getTechnicianBookings = async (id: string) => {
   const technician = await prisma.technicianProfile.findUniqueOrThrow({
     where: {
@@ -312,6 +327,7 @@ export const technicianServices = {
   updateTechnicianProfileDB,
   updateTechnicianAvailabilitySlotsDB,
   getAllTechnicians,
+  getSingleTechnician,
   getTechnicianBookings,
   updateBookingStatus,
 };

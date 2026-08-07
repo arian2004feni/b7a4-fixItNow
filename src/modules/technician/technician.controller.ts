@@ -47,12 +47,27 @@ const getAllTechnicians = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: "Services Retrieve Successully",
+      message: "Technician profile Retrieve Successully",
       data: result.data,
       meta: result.meta,
     });
-  }
-)
+  },
+);
+
+const getSingleTechnician = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await technicianServices.getSingleTechnician(
+      req.params.id as string,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Technician profile Retrieve Successully",
+      data,
+    });
+  },
+);
 
 const getTechnicianBookings = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -66,8 +81,8 @@ const getTechnicianBookings = catchAsync(
       success: true,
       statusCode: httpStatus.OK,
       message: "successfully retreived bookings",
-      data
-    })
+      data,
+    });
   },
 );
 
@@ -95,6 +110,7 @@ export const technicianController = {
   updateTechnicianProfile,
   updateTechnicianAvailabilitySlots,
   getAllTechnicians,
+  getSingleTechnician,
   getTechnicianBookings,
   updateBookingStatus,
 };

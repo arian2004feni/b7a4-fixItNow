@@ -17,12 +17,9 @@ router.put(
   technicianController.updateTechnicianAvailabilitySlots,
 );
 
+router.get("/", technicianController.getAllTechnicians);
 
-
-router.get(
-  "/",
-  technicianController.getAllTechnicians,
-)
+router.get("/:id", technicianController.getSingleTechnician);
 
 router.get(
   "/bookings",
