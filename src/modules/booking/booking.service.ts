@@ -54,6 +54,22 @@ const createBookingDB = async (userId: string, payload: ICreateBooking) => {
   return booking;
 };
 
+const getAllUsersBookings = async (id: string) => {
+  const bookings = await prisma.booking.findMany({
+    where: {
+      customerProfile: {
+        userId: id,
+      },
+    },
+    include: {
+      timeSlot: true,
+    },
+  });
+
+  return bookings;
+};
+
 export const bookingServices = {
   createBookingDB,
+  getAllUsersBookings,
 };

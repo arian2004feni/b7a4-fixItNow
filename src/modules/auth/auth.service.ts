@@ -116,8 +116,47 @@ const getMyProfileFromDB = async (userId: string) => {
       password: true,
     },
     include: {
-      customerProfile: true,
-      technicianProfile: true,
+      customerProfile: {
+        include: {
+          customerBookings: {
+            include: {
+              timeSlot: {
+                include: {
+                  technician: {
+                    include: {
+                      availabilitySlots: true,
+                    },
+                  },
+                },
+              },
+              reviews: true,
+              service: {
+                include: {
+                  category: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      technicianProfile: {
+        include: {
+          availabilitySlots: {
+            include: {
+              bookings: {
+                include: {
+                  service: {
+                    include: {
+                      category: true,
+                    },
+                  },
+                  customerProfile: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
   return user;
