@@ -4,6 +4,32 @@ import { sendResponse } from "../../utils/sendResponse";
 import { adminServices } from "./admin.service";
 import httpStatus from "http-status-codes";
 
+const getAllUsers = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const users = await adminServices.getAllUsers();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Successfuly Retrieved All Users",
+      data: users,
+    });
+  },
+);
+
+const getUserById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const users = await adminServices.getUserById(req.params.id as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Successfuly Retrieved All Users",
+      data: users,
+    });
+  },
+);
+
 const createCategory = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
@@ -46,6 +72,8 @@ const getAllBookings = catchAsync(
 );
 
 export const adminController = {
+  getAllUsers,
+  getUserById,
   createCategory,
   getAllCategories,
   getAllBookings,
