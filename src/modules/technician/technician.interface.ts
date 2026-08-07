@@ -14,6 +14,23 @@ export interface IAvailabilitySlot {
   endTime: string;
 }
 
+export interface IGetAllTechnicianQuery {
+  page?: number;
+  limit?: number;
+  name?: string;
+  experienceYears?: string;
+  location?: string;
+  status?: string;
+  mobileNumber?: string;
+  minRating?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  availabilityDay?: string;
+  sortBy?: string;
+  sortOrder?: string;
+  searchTerm?: string;
+}
+
 export interface IUpdateTechnicianAvailabilitySlots {
   availability: IAvailabilitySlot[];
 }

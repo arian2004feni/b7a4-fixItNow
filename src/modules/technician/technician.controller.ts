@@ -40,6 +40,20 @@ const updateTechnicianAvailabilitySlots = catchAsync(
   },
 );
 
+const getAllTechnicians = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await technicianServices.getAllTechnicians(req.query);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Services Retrieve Successully",
+      data: result.data,
+      meta: result.meta,
+    });
+  }
+)
+
 const getTechnicianBookings = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
@@ -80,6 +94,7 @@ const updateBookingStatus = catchAsync(
 export const technicianController = {
   updateTechnicianProfile,
   updateTechnicianAvailabilitySlots,
+  getAllTechnicians,
   getTechnicianBookings,
   updateBookingStatus,
 };

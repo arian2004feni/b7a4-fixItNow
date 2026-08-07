@@ -1,6 +1,13 @@
-import { BookingStatus } from "../../../generated/prisma/enums";
+import {
+  BookingStatus,
+  DayOfWeek,
+  Role,
+  UserStatus,
+} from "../../../generated/prisma/enums";
+import { TechnicianProfileWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 import {
+  IGetAllTechnicianQuery,
   IUpdateBookingStatus,
   IUpdateTechnicianAvailabilitySlots,
   IUpdateTechnicianProfile,
@@ -61,6 +68,164 @@ const updateTechnicianAvailabilitySlotsDB = async (
     },
     orderBy: { dayOfWeek: "asc" },
   });
+};
+
+const getAllTechnicians = async (query: IGetAllTechnicianQuery) => {
+  const {
+    page = 1,
+    limit = 10,
+    name,
+    experienceYears,
+    status,
+    location,
+    mobileNumber,
+    minRating,
+    maxPrice,
+    minPrice,
+    availabilityDay,
+    searchTerm,
+    sortBy = "createdAt",
+    sortOrder = "desc",
+  } = query;
+  const skip = (Number(page) - 1) * Number(limit);
+
+  // const category = query.category ? JSON.parse(query.category as string) : null;
+  // const categoryArray = Array.isArray(category) ? category : [];
+
+  const andConditions: TechnicianProfileWhereInput[] = [];
+
+  if (searchTerm) {
+    andConditions.push({
+      OR: [
+        {
+          user: {
+            name: {
+              contains: String(searchTerm),
+              mode: "insensitive",
+            },
+            role: {
+              equals: Role.TECHNICIAN,
+            },
+          },
+        },
+        {
+          bio: {
+            contains: String(searchTerm),
+            mode: "insensitive",
+          },
+        },
+      ],
+    });
+  }
+
+  if (name) {
+    andConditions.push({
+      user: {
+        name: {
+          equals: String(location),
+          mode: "insensitive",
+        },
+      },
+    });
+  }
+
+  if (status) {
+    andConditions.push({
+      user: {
+        status: {
+          equals: String(status.toUpperCase()) as UserStatus,
+        },
+      },
+    });
+  }
+
+  if (experienceYears) {
+    andConditions.push({
+      experienceYears: {
+        equals: Number(experienceYears),
+      },
+    });
+  }
+
+  if (location) {
+    andConditions.push({
+      location: {
+        contains: String(location),
+        mode: "insensitive",
+      },
+    });
+  }
+
+  if (mobileNumber) {
+    andConditions.push({
+      mobileNumber: {
+        contains: String(location),
+        mode: "insensitive",
+      },
+    });
+  }
+
+  if (minRating) {
+    andConditions.push({
+      averageRating: {
+        gte: Number(minRating),
+      },
+    });
+  }
+
+  if (availabilityDay) {
+    andConditions.push({
+      availabilitySlots: {
+        some: {
+          dayOfWeek: {
+            equals: String(availabilityDay.toUpperCase()) as DayOfWeek,
+          },
+        },
+      },
+    });
+  }
+
+  // if (minPrice || maxPrice) {
+  //   if (minPrice) {
+  //     andConditions.push({ price: { gte: Number(minPrice) } });
+  //   }
+  //   if (maxPrice) {
+  //     andConditions.push({ price: { lte: Number(maxPrice) } });
+  //   }
+  // }
+
+  const technician = await prisma.technicianProfile.findMany({
+    where: {
+      AND: andConditions,
+    },
+    include: {
+      user: true,
+      availabilitySlots: true,
+      reviewsReceived: true,
+      services: true,
+    },
+    orderBy: {
+      [String(sortBy)]: sortOrder,
+    },
+    skip,
+    take: Number(limit),
+  });
+
+  const totalTechniciansCount = await prisma.technicianProfile.count({
+    where: {
+      AND: andConditions,
+    },
+  });
+
+  return {
+    data: technician,
+    meta: {
+      page: Number(page),
+      limit: Number(limit),
+      total: totalTechniciansCount,
+      totalPages: Math.ceil(totalTechniciansCount / Number(limit)),
+    },
+  };
 };
 
 const getTechnicianBookings = async (id: string) => {
@@ -146,6 +311,7 @@ const updateBookingStatus = async (
 export const technicianServices = {
   updateTechnicianProfileDB,
   updateTechnicianAvailabilitySlotsDB,
+  getAllTechnicians,
   getTechnicianBookings,
   updateBookingStatus,
 };

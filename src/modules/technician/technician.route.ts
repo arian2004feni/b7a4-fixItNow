@@ -17,6 +17,13 @@ router.put(
   technicianController.updateTechnicianAvailabilitySlots,
 );
 
+
+
+router.get(
+  "/",
+  technicianController.getAllTechnicians,
+)
+
 router.get(
   "/bookings",
   auth(Role.TECHNICIAN),
