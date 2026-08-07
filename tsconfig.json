@@ -9,7 +9,7 @@
     // See also https://aka.ms/tsconfig/module
     "module": "esnext",
     "moduleResolution": "bundler",
-    "target": "es2023",
+    "target": "esnext", // must match with tsup.config.ts
     "types": ["node"],
     // For nodejs:
     // "lib": ["esnext"],
@@ -42,6 +42,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  // "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "generated/prisma"]
+  "include": ["src/**/*"],
+  "exclude": []
 }

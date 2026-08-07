@@ -5,9 +5,12 @@
   "main": "server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsup",
     "start": "node dist/server.js",
-    "stripe:webhook" : "stripe listen --forward-to localhost:3000/api/payments/confirm",
+    "deploy": "npm run build && vercel --prod",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "stripe:webhook": "stripe listen --forward-to localhost:3000/api/payments/confirm",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -36,6 +39,7 @@
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0",
-    "stripe": "^22.4.0"
+    "stripe": "^22.4.0",
+    "tsup": "^8.5.1"
   }
 }
