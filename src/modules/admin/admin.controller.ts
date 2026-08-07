@@ -32,7 +32,21 @@ const getAllCategories = catchAsync(
   },
 );
 
+const getAllBookings = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const bookings = await adminServices.getAllBookings();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Successfuly Retrieved all bookings",
+      data: bookings,
+    });
+  },
+);
+
 export const adminController = {
   createCategory,
   getAllCategories,
+  getAllBookings,
 };

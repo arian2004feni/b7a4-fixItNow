@@ -24,7 +24,22 @@ const getAllCategories = async () => {
   return category;
 };
 
+const getAllBookings = async () => {
+  const bookings = await prisma.booking.findMany({
+    include: {
+      service: {
+        include: {
+          category: true,
+        },
+      },
+    },
+  });
+
+  return bookings;
+};
+
 export const adminServices = {
   createCategoryInToDB,
   getAllCategories,
+  getAllBookings,
 };
