@@ -34,7 +34,36 @@ const webhook = catchAsync(
   },
 );
 
+const getUsersPayments = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const data = await paymentService.getAllUsersPayments(userId as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "user payments retreived successfully",
+      data,
+    });
+  },
+);
+
+const getPaymentDetails = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = await paymentService.getPaymentDetails(req.params.id as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "user payments retreived successfully",
+      data,
+    });
+  },
+);
+
 export const paymentController = {
   createPayment,
   webhook,
+  getUsersPayments,
+  getPaymentDetails
 };

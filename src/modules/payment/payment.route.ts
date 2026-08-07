@@ -9,4 +9,8 @@ router.post("/create", auth(Role.CUSTOMER), paymentController.createPayment);
 
 router.post("/confirm", paymentController.webhook);
 
+router.get("/", paymentController.getUsersPayments);
+
+router.get("/:id", paymentController.getPaymentDetails);
+
 export const paymentRouter = router;

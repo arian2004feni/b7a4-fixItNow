@@ -112,7 +112,57 @@ const handleWebhook = async (payload: Buffer, signature: string) => {
   // res.json({ received: true });
 };
 
+const getAllUsersPayments = async (userId: string) => {
+  const payments = await prisma.payment.findMany({
+    where: {
+      bookings: {
+        customerProfile: {
+          userId,
+        },
+      },
+    },
+    include: {
+      bookings: {
+        select: {
+          service: {
+            select: {
+              price: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return payments;
+};
+
+const getPaymentDetails = async (id: string) => {
+  const payment = await prisma.payment.findUniqueOrThrow({
+    where: {
+      id,
+    },
+    include: {
+      bookings: {
+        include: {
+          timeSlot: true,
+          customerProfile: true,
+          service: {
+            include: {
+              technician: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return payment;
+};
+
 export const paymentService = {
   createPayment,
   handleWebhook,
+  getAllUsersPayments,
+  getPaymentDetails,
 };
