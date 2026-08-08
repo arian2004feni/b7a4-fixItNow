@@ -47,17 +47,48 @@ const updateTechnicianAvailabilitySlotsDB = async (
     where: { userId: userId },
   });
 
+  // await prisma.$transaction(async (tx) => {
+  //   await tx.availabilitySlots.deleteMany({
+  //     where: { technicianId: technician.id },
+  //   });
+
+  //   await tx.availabilitySlots.createMany({
+  //     data: payload.availability.map((i) => ({
+  //       technicianId: technician.id,
+  //       dayOfWeek: i.dayOfWeek,
+  //       startTime: i.startTime,
+  //       endTime: i.endTime,
+  //     })),
+  //   });
+  // });
   await prisma.$transaction(async (tx) => {
+    const bookedSlots = await tx.availabilitySlots.findMany({
+      where: {
+        technicianId: technician.id,
+        bookings: {
+          some: {},
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
     await tx.availabilitySlots.deleteMany({
-      where: { technicianId: technician.id },
+      where: {
+        technicianId: technician.id,
+        id: {
+          notIn: bookedSlots.map((slot) => slot.id),
+        },
+      },
     });
 
     await tx.availabilitySlots.createMany({
-      data: payload.availability.map((i) => ({
+      data: payload.availability.map((item) => ({
         technicianId: technician.id,
-        dayOfWeek: i.dayOfWeek,
-        startTime: i.startTime,
-        endTime: i.endTime,
+        dayOfWeek: item.dayOfWeek,
+        startTime: item.startTime,
+        endTime: item.endTime,
       })),
     });
   });

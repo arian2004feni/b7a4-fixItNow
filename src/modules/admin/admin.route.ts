@@ -7,9 +7,8 @@ const router = Router();
 
 router.get("/users", auth(Role.ADMIN), adminController.getAllUsers);
 router.get("/users/:id", auth(Role.ADMIN), adminController.getUserById);
-router.get("/users", auth(Role.ADMIN), adminController.getAllUsers);
 router.post("/categories", auth(Role.ADMIN), adminController.createCategory);
-router.get("/categories", auth(Role.ADMIN), adminController.getAllCategories);
+router.get("/categories", adminController.getAllCategories);
 router.get("/bookings", auth(Role.ADMIN), adminController.getAllBookings);
 
 export const adminRouter = router;

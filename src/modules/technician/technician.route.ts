@@ -17,10 +17,6 @@ router.put(
   technicianController.updateTechnicianAvailabilitySlots,
 );
 
-router.get("/", technicianController.getAllTechnicians);
-
-router.get("/:id", technicianController.getSingleTechnician);
-
 router.get(
   "/bookings",
   auth(Role.TECHNICIAN),
@@ -32,5 +28,9 @@ router.patch(
   auth(Role.TECHNICIAN),
   technicianController.updateBookingStatus,
 );
+
+router.get("/", technicianController.getAllTechnicians);
+
+router.get("/:id", technicianController.getSingleTechnician);
 
 export const technicianRouter = router;
