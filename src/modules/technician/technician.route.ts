@@ -29,6 +29,12 @@ router.patch(
   technicianController.updateBookingStatus,
 );
 
+router.patch(
+  "/complete/bookings/:id",
+  auth(Role.TECHNICIAN),
+  technicianController.completeBookingStatus,
+);
+
 router.get("/", technicianController.getAllTechnicians);
 
 router.get("/:id", technicianController.getSingleTechnician);

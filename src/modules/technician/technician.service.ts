@@ -309,7 +309,7 @@ const updateBookingStatus = async (
 ) => {
   const { status } = payload;
 
-  if (status !== BookingStatus.ACCEPTED && status !== BookingStatus.DECLINED) {
+  if (status !== (BookingStatus.ACCEPTED || BookingStatus.DECLINED)) {
     throw new Error("Only ACCEPTED and DECLINED are allowed.");
   }
 
@@ -322,15 +322,12 @@ const updateBookingStatus = async (
   const booking = await prisma.booking.findUnique({
     where: {
       id: bookingId,
+      technicianId: technician.id,
     },
   });
 
   if (!booking) {
-    throw new Error("booking not found");
-  }
-
-  if (booking.technicianId !== technician.id) {
-    throw new Error("You're not authorized to update this booking.");
+    throw new Error("booking not found by id and userProfile");
   }
 
   if (booking.status !== BookingStatus.REQUESTED) {
@@ -354,6 +351,45 @@ const updateBookingStatus = async (
   return result;
 };
 
+const completeBookingStatus = async (bookingId: string, userId: string) => {
+  const technician = await prisma.technicianProfile.findUniqueOrThrow({
+    where: {
+      userId,
+    },
+  });
+
+  const booking = await prisma.booking.findUnique({
+    where: {
+      id: bookingId,
+      technicianId: technician.id,
+    },
+  });
+
+  if (!booking) {
+    throw new Error("booking not found by id and userProfile");
+  }
+
+  if (!(booking.status === (BookingStatus.IN_PROGRESS || BookingStatus.PAID))) {
+    throw new Error(`Booking is already ${booking.status.toLowerCase()}`);
+  }
+
+  const result = await prisma.booking.update({
+    where: {
+      id: bookingId,
+    },
+    data: {
+      status: BookingStatus.COMPLETED,
+    },
+    include: {
+      customerProfile: true,
+      technicianProfile: true,
+      service: true,
+    },
+  });
+
+  return result;
+};
+
 export const technicianServices = {
   updateTechnicianProfileDB,
   updateTechnicianAvailabilitySlotsDB,
@@ -361,4 +397,5 @@ export const technicianServices = {
   getSingleTechnician,
   getTechnicianBookings,
   updateBookingStatus,
+  completeBookingStatus,
 };

@@ -9,13 +9,13 @@ router.post("/", auth(Role.CUSTOMER), bookingController.createBooking);
 
 router.get(
   "/",
-  auth(Role.CUSTOMER, Role.ADMIN),
+  auth(Role.CUSTOMER),
   bookingController.getUsersBookings,
 );
 
 router.get(
   "/:id",
-  auth(Role.CUSTOMER, Role.ADMIN),
+  auth(Role.CUSTOMER),
   bookingController.getUsersBookingsById,
 );
 

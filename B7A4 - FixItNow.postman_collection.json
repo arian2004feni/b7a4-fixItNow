@@ -8,7 +8,7 @@
   },
   "item": [
     {
-      "name": "localhost",
+      "name": "Auth",
       "item": [
         {
           "name": "Register User",
@@ -17,7 +17,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"customer2\",\r\n    \"email\": \"customer2@fixitnow.com\",\r\n    \"password\": \"12346\",\r\n    \"role\": \"CUSTOMER\"\r\n}",
+              "raw": "{\r\n    \"name\": \"technician3\",\r\n    \"email\": \"technician3@fixitnow.com\",\r\n    \"password\": \"12346\",\r\n    \"role\": \"TECHNICIAN\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -25,12 +25,10 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3000/api/auth/register",
-              "protocol": "http",
+              "raw": "{{base-url}}/api/auth/register",
               "host": [
-                "localhost"
+                "{{base-url}}"
               ],
-              "port": "3000",
               "path": [
                 "api",
                 "auth",
@@ -47,7 +45,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"admin@fixitnow.com\",\r\n    \"password\": \"admin@fixitnow12346\"\r\n}",
+              "raw": "{\r\n    \"email\": \"technician3@fixitnow.com\",\r\n    \"password\": \"12346\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -55,12 +53,10 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3000/api/auth/login",
-              "protocol": "http",
+              "raw": "{{base-url}}/api/auth/login",
               "host": [
-                "localhost"
+                "{{base-url}}"
               ],
-              "port": "3000",
               "path": [
                 "api",
                 "auth",
@@ -79,12 +75,10 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:3000/api/auth/me",
-              "protocol": "http",
+              "raw": "{{base-url}}/api/auth/me",
               "host": [
-                "localhost"
+                "{{base-url}}"
               ],
-              "port": "3000",
               "path": [
                 "api",
                 "auth",
@@ -93,272 +87,12 @@
             }
           },
           "response": []
-        },
-        {
-          "name": "create category",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Repair\",\r\n    \"description\": \"Repair Home Service\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/admin/categories",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "admin",
-                "categories"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "create service",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"name\": \"AC Repair and Upgrades\",\r\n  \"description\": \"acacac repup\",\r\n  \"price\": 1200,\r\n  \"category\": \"Repair\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/services",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "services"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "update technician profile",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"profilePhoto\": \"string\",\r\n  \"bio\": \"string\",\r\n  \"location\": \"string\",\r\n  \"mobileNumber\": \"string\",\r\n  \"experienceYears\": 1\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/technician/profile",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "technician",
-                "profile"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "update technician availability slots",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"availability\": [\r\n    {\r\n      \"dayOfWeek\": \"TUESDAY\",\r\n      \"startTime\": \"09:00\",\r\n      \"endTime\": \"18:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"WEDNESDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"THURSDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"FRIDAY\",\r\n      \"startTime\": \"09:00\",\r\n      \"endTime\": \"13:00\"\r\n    }\r\n  ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/technician/availability",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "technician",
-                "availability"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "create bookings",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"serviceId\": \"6cb41731-c871-419b-ba2e-bf9ae7ad2cdc\",\r\n    \"timeSlotId\": \"2ea70f9c-4198-4e20-8d14-fe5e3bef9d36\",\r\n    \"note\": \"bring it on.\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/bookings",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "bookings"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get technician bookings",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/technician/bookings",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "technician",
-                "bookings"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "update booking status",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"status\": \"ACCEPTED\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/technician/bookings/:id",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "technician",
-                "bookings",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "848ae409-4d9c-40f9-b677-884c875675fa"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "create payment session",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"bookingId\": \"848ae409-4d9c-40f9-b677-884c875675fa\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/payments/create",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "payments",
-                "create"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "create review",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"bookingId\": \"848ae409-4d9c-40f9-b677-884c875675fa\",\r\n    \"comment\": \"perra re pera...\",\r\n    \"rating\": 10\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/reviews",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "reviews"
-              ]
-            }
-          },
-          "response": []
-        },
+        }
+      ]
+    },
+    {
+      "name": "Public",
+      "item": [
         {
           "name": "get services",
           "protocolProfileBehavior": {
@@ -372,12 +106,10 @@
               "raw": ""
             },
             "url": {
-              "raw": "http://localhost:3000/api/services",
-              "protocol": "http",
+              "raw": "{{base-url}}/api/services",
               "host": [
-                "localhost"
+                "{{base-url}}"
               ],
-              "port": "3000",
               "path": [
                 "api",
                 "services"
@@ -434,17 +166,41 @@
           "response": []
         },
         {
+          "name": "get all categories",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base-url}}/api/admin/categories",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "get all technicians",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:3000/api/technician?searchTerm=string",
-              "protocol": "http",
+              "raw": "{{base-url}}/api/technician",
               "host": [
-                "localhost"
+                "{{base-url}}"
               ],
-              "port": "3000",
               "path": [
                 "api",
                 "technician"
@@ -513,7 +269,7 @@
                 {
                   "key": "searchTerm",
                   "value": "string",
-                  "type": "text"
+                  "disabled": true
                 },
                 {
                   "key": "status",
@@ -527,45 +283,15 @@
           "response": []
         },
         {
-          "name": "get all categories",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "http://localhost:3000/api/admin/categories",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "admin",
-                "categories"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "get single technician",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:3000/api/technician/:id",
-              "protocol": "http",
+              "raw": "{{base-url}}/api/technician/:id",
               "host": [
-                "localhost"
+                "{{base-url}}"
               ],
-              "port": "3000",
               "path": [
                 "api",
                 "technician",
@@ -575,179 +301,6 @@
                 {
                   "key": "id",
                   "value": "06130fcf-4cda-4313-a693-79aadb1137cb"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get  users bookings",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/bookings",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "bookings"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get all bookings",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/admin/bookings",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "admin",
-                "bookings"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get users boking by id",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/bookings/:id",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "bookings",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "848ae409-4d9c-40f9-b677-884c875675fa"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get all users",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/admin/users",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "admin",
-                "users"
-              ],
-              "query": [
-                {
-                  "key": null,
-                  "value": "",
-                  "type": "text",
-                  "disabled": true
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get user details",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/admin/users/:id",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "admin",
-                "users",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "0fc1cefe-7f8d-4eb9-b539-9c37f0f6f571"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get users payment",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/payments/",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "payments",
-                ""
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get user's payment details",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:3000/api/payments/:id",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "3000",
-              "path": [
-                "api",
-                "payments",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "d828862a-8d41-47c9-b202-809fed60abe7"
                 }
               ]
             }
@@ -757,16 +310,16 @@
       ]
     },
     {
-      "name": "Production",
+      "name": "Bookings",
       "item": [
         {
-          "name": "Register User",
+          "name": "create bookings",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"customer2\",\r\n    \"email\": \"customer2@fixitnow.com\",\r\n    \"password\": \"12346\",\r\n    \"role\": \"CUSTOMER\"\r\n}",
+              "raw": "{\r\n    \"serviceId\": \"6cb41731-c871-419b-ba2e-bf9ae7ad2cdc\",\r\n    \"timeSlotId\": \"2ea70f9c-4198-4e20-8d14-fe5e3bef9d36\",\r\n    \"note\": \"bring it on.\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -774,30 +327,26 @@
               }
             },
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/auth/register",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/bookings",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
               ],
               "path": [
                 "api",
-                "auth",
-                "register"
+                "bookings"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Login User",
+          "name": "update booking status",
           "request": {
-            "method": "POST",
+            "method": "PATCH",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"customer2@fixitnow.com\",\r\n    \"password\": \"12346\"\r\n}",
+              "raw": "{\r\n  \"status\": \"ACCEPTED\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -805,47 +354,110 @@
               }
             },
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/auth/login",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/technician/bookings/:id",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
               ],
               "path": [
                 "api",
-                "auth",
-                "login"
+                "technician",
+                "bookings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "848ae409-4d9c-40f9-b677-884c875675fa"
+                }
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Get My Profile",
+          "name": "complete booking",
           "request": {
-            "auth": {
-              "type": "noauth"
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"COMPLETED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
+            "url": {
+              "raw": "{{base-url}}/api/technician/complete/bookings/:id",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "technician",
+                "complete",
+                "bookings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "848ae409-4d9c-40f9-b677-884c875675fa"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get  users bookings",
+          "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/auth/me",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/bookings",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
               ],
               "path": [
                 "api",
-                "auth",
-                "me"
+                "bookings"
               ]
             }
           },
           "response": []
         },
+        {
+          "name": "get single boking by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base-url}}/api/bookings/:id",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "848ae409-4d9c-40f9-b677-884c875675fa"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
         {
           "name": "create category",
           "request": {
@@ -861,12 +473,9 @@
               }
             },
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/admin/categories",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/admin/categories",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
               ],
               "path": [
                 "api",
@@ -878,13 +487,108 @@
           "response": []
         },
         {
-          "name": "create service",
+          "name": "get all categories Copy",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base-url}}/api/admin/categories",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base-url}}/api/admin/bookings",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base-url}}/api/admin/users",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get user details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base-url}}/api/admin/users/:id",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "5c3142e1-7e29-428a-9924-131dc41c32b3"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "item": [
+        {
+          "name": "create review",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"name\": \"AC Repair and Upgrades\",\r\n  \"description\": \"acacac repup\",\r\n  \"price\": 1200,\r\n  \"category\": \"Repair\"\r\n}",
+              "raw": "{\r\n    \"bookingId\": \"848ae409-4d9c-40f9-b677-884c875675fa\",\r\n    \"comment\": \"perra re pera...\",\r\n    \"rating\": 10\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -892,12 +596,41 @@
               }
             },
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/services",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/reviews",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Technician",
+      "item": [
+        {
+          "name": "create service",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"AC Repair and Upgrades\",\r\n  \"description\": \"acacac repup\",\r\n  \"price\": 1200,\r\n  \"category\": \"fix and upgrade\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base-url}}/api/services",
+              "host": [
+                "{{base-url}}"
               ],
               "path": [
                 "api",
@@ -922,12 +655,9 @@
               }
             },
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/technician/profile",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/technician/profile",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
               ],
               "path": [
                 "api",
@@ -945,7 +675,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"availability\": [\r\n    {\r\n      \"dayOfWeek\": \"TUESDAY\",\r\n      \"startTime\": \"09:00\",\r\n      \"endTime\": \"18:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"WEDNESDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"THURSDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"FRIDAY\",\r\n      \"startTime\": \"09:00\",\r\n      \"endTime\": \"13:00\"\r\n    }\r\n  ]\r\n}",
+              "raw": "{\r\n  \"availability\": [\r\n    {\r\n      \"dayOfWeek\": \"50\",\r\n      \"startTime\": \"09:00\",\r\n      \"endTime\": \"18:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"WEDNESDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"THURSDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"FRIDAY\",\r\n      \"startTime\": \"09:00\",\r\n      \"endTime\": \"13:00\"\r\n    }\r\n  ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -953,12 +683,9 @@
               }
             },
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/technician/availability",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/technician/availability",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
               ],
               "path": [
                 "api",
@@ -970,47 +697,14 @@
           "response": []
         },
         {
-          "name": "create bookings",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"serviceId\": \"6cb41731-c871-419b-ba2e-bf9ae7ad2cdc\",\r\n    \"timeSlotId\": \"2ea70f9c-4198-4e20-8d14-fe5e3bef9d36\",\r\n    \"note\": \"bring it on.\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/bookings",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "bookings"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "get technician bookings",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/technician/bookings",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/technician/bookings",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
               ],
               "path": [
                 "api",
@@ -1020,45 +714,12 @@
             }
           },
           "response": []
-        },
-        {
-          "name": "update booking status",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n  \"status\": \"ACCEPTED\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/technician/bookings/:id",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "technician",
-                "bookings",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "848ae409-4d9c-40f9-b677-884c875675fa"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
         {
           "name": "create payment session",
           "request": {
@@ -1074,12 +735,9 @@
               }
             },
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/payments/create",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/payments/create",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
               ],
               "path": [
                 "api",
@@ -1091,409 +749,14 @@
           "response": []
         },
         {
-          "name": "create review",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"bookingId\": \"848ae409-4d9c-40f9-b677-884c875675fa\",\r\n    \"comment\": \"perra re pera...\",\r\n    \"rating\": 10\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/reviews",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "reviews"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get services",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/services",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "services"
-              ],
-              "query": [
-                {
-                  "key": "searchTerm",
-                  "value": "repair",
-                  "disabled": true
-                },
-                {
-                  "key": "page",
-                  "value": "2",
-                  "disabled": true
-                },
-                {
-                  "key": "limit",
-                  "value": "2",
-                  "disabled": true
-                },
-                {
-                  "key": "location",
-                  "value": "Dhaka",
-                  "disabled": true
-                },
-                {
-                  "key": "minPrice",
-                  "value": "500",
-                  "disabled": true
-                },
-                {
-                  "key": "maxPrice",
-                  "value": "3000",
-                  "disabled": true
-                },
-                {
-                  "key": "minRating",
-                  "value": "4",
-                  "disabled": true
-                },
-                {
-                  "key": "sortBy",
-                  "value": "price",
-                  "disabled": true
-                },
-                {
-                  "key": "sortOrder",
-                  "value": "desc",
-                  "disabled": true
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get all technicians",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/technician?searchTerm=string",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "technician"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1",
-                  "disabled": true
-                },
-                {
-                  "key": "limit",
-                  "value": "10",
-                  "disabled": true
-                },
-                {
-                  "key": "name",
-                  "value": "string",
-                  "disabled": true
-                },
-                {
-                  "key": "experienceYears",
-                  "value": "1",
-                  "disabled": true
-                },
-                {
-                  "key": "location",
-                  "value": "Dhaka",
-                  "disabled": true
-                },
-                {
-                  "key": "mobileNumber",
-                  "value": "01234323453",
-                  "disabled": true
-                },
-                {
-                  "key": "minRating",
-                  "value": "4",
-                  "disabled": true
-                },
-                {
-                  "key": "minPrice",
-                  "value": "500",
-                  "disabled": true
-                },
-                {
-                  "key": "maxPrice",
-                  "value": "2000",
-                  "disabled": true
-                },
-                {
-                  "key": "availabilityDay",
-                  "value": "sunday",
-                  "disabled": true
-                },
-                {
-                  "key": "sortBy",
-                  "value": "rating",
-                  "disabled": true
-                },
-                {
-                  "key": "sortOrder",
-                  "value": "desc",
-                  "disabled": true
-                },
-                {
-                  "key": "searchTerm",
-                  "value": "string"
-                },
-                {
-                  "key": "status",
-                  "value": "active",
-                  "type": "text",
-                  "disabled": true
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get all categories",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/admin/categories",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "categories"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get single technician",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/technician/:id",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "technician",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "06130fcf-4cda-4313-a693-79aadb1137cb"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get  users bookings",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/bookings",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "bookings"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get all bookings",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/admin/bookings",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "bookings"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get users boking by id",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/bookings/:id",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "bookings",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "848ae409-4d9c-40f9-b677-884c875675fa"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get all users",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/admin/bookings",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "bookings"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get user details",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/admin/bookings",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "bookings"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get users payment",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/payments/",
-              "protocol": "https",
-              "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
-              ],
-              "path": [
-                "api",
-                "payments",
-                ""
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "get user's payment details",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "https://arian2004-fixitnow.vercel.app/api/payments/:id",
-              "protocol": "https",
+              "raw": "{{base-url}}/api/payments/:id",
               "host": [
-                "arian2004-fixitnow",
-                "vercel",
-                "app"
+                "{{base-url}}"
               ],
               "path": [
                 "api",
@@ -1505,6 +768,25 @@
                   "key": "id",
                   "value": "d828862a-8d41-47c9-b202-809fed60abe7"
                 }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get users payment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base-url}}/api/payments/",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                ""
               ]
             }
           },
