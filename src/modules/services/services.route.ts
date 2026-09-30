@@ -7,6 +7,10 @@ const router = Router();
 
 router.post("/", auth(Role.TECHNICIAN), servicesController.createService);
 
+router.patch("/:id", auth(Role.TECHNICIAN), servicesController.updateService);
+
+router.delete("/:id", auth(Role.TECHNICIAN), servicesController.deleteService);
+
 router.get("/", servicesController.getAllServices);
 
 export const serviceRouter = router;

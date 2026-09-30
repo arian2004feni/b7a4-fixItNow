@@ -11,8 +11,14 @@ router.put(
   technicianController.updateTechnicianProfile,
 );
 
-router.put(
+router.post(
   "/availability",
+  auth(Role.TECHNICIAN),
+  technicianController.createAvailabilitySlots,
+);
+
+router.patch(
+  "/availability/:id",
   auth(Role.TECHNICIAN),
   technicianController.updateTechnicianAvailabilitySlots,
 );
@@ -27,6 +33,12 @@ router.patch(
   "/bookings/:id",
   auth(Role.TECHNICIAN),
   technicianController.updateBookingStatus,
+);
+
+router.patch(
+  "/start/bookings/:id",
+  auth(Role.TECHNICIAN),
+  technicianController.startTheJob,
 );
 
 router.patch(

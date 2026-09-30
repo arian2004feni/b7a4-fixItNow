@@ -81,12 +81,21 @@ const getUsersBookingsById = async (userId: string, bookingId: string) => {
       service: {
         include: {
           category: true,
-          technician: true,
         },
       },
       reviews: true,
       timeSlot: true,
       payments: true,
+      customerProfile: {
+        include: {
+          user: true,
+        },
+      },
+      technicianProfile: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 

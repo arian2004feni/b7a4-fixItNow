@@ -1,9 +1,13 @@
 import { ServiceWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
-import { ICreateService, IGetServicesQuery } from "./services.interface";
+import {
+  ICreateService,
+  IGetServicesQuery,
+  IUpdateService,
+} from "./services.interface";
 
 const createServiceInToDB = async (payload: ICreateService, userId: string) => {
-  const { category, price, name, description } = payload;
+  const { category, price, name, description, thumbnail, duration } = payload;
 
   const categoryDB = await prisma.category.findFirst({
     where: {
@@ -31,7 +35,57 @@ const createServiceInToDB = async (payload: ICreateService, userId: string) => {
       description,
       categoryId: categoryDB.id,
       technicianId: loggedInTechnician.id,
+      thumbnail,
+      duration,
     },
+    include: {
+      category: true,
+    },
+  });
+
+  return service;
+};
+
+const updateService = async (
+  id: string,
+  userId: string,
+  payload: IUpdateService,
+) => {
+  const { price, name, description, thumbnail, duration } = payload;
+
+  const loggedInTechnician = await prisma.technicianProfile.findUniqueOrThrow({
+    where: {
+      userId: userId,
+    },
+  });
+
+  const service = await prisma.service.update({
+    where: { id },
+    data: {
+      name,
+      price,
+      description,
+      technicianId: loggedInTechnician.id,
+      thumbnail,
+      duration,
+    },
+    include: {
+      category: true,
+    },
+  });
+
+  return service;
+};
+
+const deleteService = async (id: string, userId: string) => {
+  const loggedInTechnician = await prisma.technicianProfile.findUniqueOrThrow({
+    where: {
+      userId: userId,
+    },
+  });
+
+  const service = await prisma.service.delete({
+    where: { id, technicianId: loggedInTechnician.id },
   });
 
   return service;
@@ -99,7 +153,17 @@ const getAllService = async (query: IGetServicesQuery) => {
       AND: andConditions,
     },
     include: {
-      technician: true,
+      technician: {
+        include: {
+          user: true,
+          reviewsReceived: true,
+          _count: {
+            select: {
+              reviewsReceived: true,
+            },
+          },
+        },
+      },
       category: true,
     },
     orderBy: {
@@ -128,5 +192,7 @@ const getAllService = async (query: IGetServicesQuery) => {
 
 export const serviceOfServices = {
   createServiceInToDB,
+  updateService,
+  deleteService,
   getAllService,
 };

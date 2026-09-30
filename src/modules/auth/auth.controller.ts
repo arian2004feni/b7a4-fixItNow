@@ -48,6 +48,28 @@ const login = catchAsync(
   },
 );
 
+const refreshToken = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const refreshTokenFromCookies = req.cookies.refreshToken;
+
+    const { accessToken } = await authService.refreshToken(refreshTokenFromCookies);
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24, // 24hrs
+    });
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "token refreshed successfully",
+      data: { accessToken },
+    });
+  },
+);
+
 const getMyProfile = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const profile = await authService.getMyProfileFromDB(
@@ -58,7 +80,7 @@ const getMyProfile = catchAsync(
       success: true,
       statusCode: httpStatus.OK,
       message: "user profile fetched successfully",
-      data: { profile },
+      data: profile,
     });
   },
 );
@@ -66,5 +88,6 @@ const getMyProfile = catchAsync(
 export const authController = {
   register,
   login,
+  refreshToken,
   getMyProfile,
 };

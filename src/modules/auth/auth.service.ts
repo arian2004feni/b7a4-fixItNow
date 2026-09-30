@@ -4,7 +4,7 @@ import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { LoginUserPayload, RegisterUserPayload } from "./auth.interface";
 import { Prisma } from "../../../generated/prisma/client";
-import { SignOptions } from "jsonwebtoken";
+import { JwtPayload, SignOptions } from "jsonwebtoken";
 import { jwtUtils } from "../../utils/jwt";
 
 const signInUser = async (payload: RegisterUserPayload) => {
@@ -107,6 +107,44 @@ const loginUser = async (payload: LoginUserPayload) => {
   return { accessToken, refreshToken };
 };
 
+const refreshToken = async (refreshTokenFromCookies: string) => {
+  const verifiedRefreshToken = jwtUtils.verifyToken(
+    refreshTokenFromCookies,
+    config.jwt_refresh_secret,
+  );
+
+  if (!verifiedRefreshToken.success) {
+    throw new Error(verifiedRefreshToken.error);
+  }
+
+  const { id } = verifiedRefreshToken.data as JwtPayload;
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  if (user.status === UserStatus.BANNED) {
+    throw new Error("User is blocked!");
+  }
+
+  const jwtPayload = {
+    id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
+
+  const accessToken = jwtUtils.createToken(
+    jwtPayload,
+    config.jwt_access_secret,
+    config.jwt_access_expiration as SignOptions,
+  );
+
+  return { accessToken };
+};
+
 const getMyProfileFromDB = async (userId: string) => {
   const user = await prisma.user.findUniqueOrThrow({
     where: {
@@ -120,42 +158,45 @@ const getMyProfileFromDB = async (userId: string) => {
         include: {
           customerBookings: {
             include: {
-              timeSlot: {
-                include: {
-                  technician: {
-                    include: {
-                      availabilitySlots: true,
-                    },
-                  },
-                },
-              },
+              payments: true,
               reviews: true,
               service: {
                 include: {
                   category: true,
                 },
               },
-            },
-          },
-        },
-      },
-      technicianProfile: {
-        include: {
-          availabilitySlots: {
-            include: {
-              bookings: {
+              timeSlot: true,
+              technicianProfile: {
                 include: {
-                  service: {
-                    include: {
-                      category: true,
-                    },
-                  },
-                  customerProfile: true,
+                  user: true,
                 },
               },
             },
           },
+          reviewsGiven: true,
         },
+      },
+      technicianProfile: {
+        include: {
+          availabilitySlots: true,
+          bookings: {
+            include: {
+              customerProfile: {
+                include: {
+                  user: true
+                }
+              },
+              service: true,
+              timeSlot: true
+            }
+          },
+          reviewsReceived: true,
+          services: {
+            include: {
+              category: true,
+            }
+          },
+        }
       },
     },
   });
@@ -165,5 +206,6 @@ const getMyProfileFromDB = async (userId: string) => {
 export const authService = {
   signInUser,
   loginUser,
+  refreshToken,
   getMyProfileFromDB,
 };

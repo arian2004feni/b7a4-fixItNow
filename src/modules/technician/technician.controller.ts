@@ -23,10 +23,28 @@ const updateTechnicianProfile = catchAsync(
   },
 );
 
+const createAvailabilitySlots = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const availabilitySlots =
+      await technicianServices.createAvailabilitySlotsDB(
+        req.user?.id as string,
+        req.body,
+      );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Availability Slots successfully Created",
+      data: availabilitySlots,
+    });
+  },
+);
+
 const updateTechnicianAvailabilitySlots = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const availabilitySlots =
       await technicianServices.updateTechnicianAvailabilitySlotsDB(
+        req.params.id as string,
         req.user?.id as string,
         req.body,
       );
@@ -106,6 +124,25 @@ const updateBookingStatus = catchAsync(
   },
 );
 
+const startTheJob = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const bookingId = req.params.id;
+    const userId = req.user?.id;
+
+    const result = await technicianServices.startJob(
+      bookingId as string,
+      userId as string,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "successfully change status to in_progress",
+      data: result,
+    });
+  },
+);
+
 const completeBookingStatus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const bookingId = req.params.id;
@@ -127,10 +164,12 @@ const completeBookingStatus = catchAsync(
 
 export const technicianController = {
   updateTechnicianProfile,
+  createAvailabilitySlots,
   updateTechnicianAvailabilitySlots,
   getAllTechnicians,
   getSingleTechnician,
   getTechnicianBookings,
   updateBookingStatus,
-  completeBookingStatus
+  startTheJob,
+  completeBookingStatus,
 };

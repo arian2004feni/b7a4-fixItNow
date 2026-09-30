@@ -7,9 +7,10 @@ import {
 import { TechnicianProfileWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 import {
+  IAvailabilitySlot,
   IGetAllTechnicianQuery,
   IUpdateBookingStatus,
-  IUpdateTechnicianAvailabilitySlots,
+  ICreateTechnicianAvailabilitySlots,
   IUpdateTechnicianProfile,
 } from "./technician.interface";
 
@@ -38,67 +39,109 @@ const updateTechnicianProfileDB = async (
 
   return updatedTechnician;
 };
+const createAvailabilitySlotsDB = async (
+  userId: string,
+  payload: ICreateTechnicianAvailabilitySlots,
+) => {
+  const technician = await prisma.technicianProfile.findUniqueOrThrow({
+    where: {
+      userId,
+    },
+  });
+
+  // 1. Check for missing dayOfWeek values
+  const hasMissingDay = payload.availability.some((item) => !item.dayOfWeek);
+
+  if (hasMissingDay) {
+    throw new Error(
+      "Validation failed: One or more availability entries are missing 'dayOfWeek'.",
+    );
+  }
+
+  // 2. Check for duplicate dayOfWeek values
+  const days = payload.availability.map((item) => item.dayOfWeek);
+
+  const hasDuplicates = new Set(days).size !== days.length;
+
+  if (hasDuplicates) {
+    throw new Error(
+      "Validation failed: Duplicate 'dayOfWeek' values detected.",
+    );
+  }
+
+  // 3. Wait for ALL create/update operations to finish
+  await Promise.all(
+    payload.availability.map(async (d) => {
+      const findSlot = await prisma.availabilitySlots.findUnique({
+        where: {
+          technicianId_dayOfWeek: {
+            technicianId: technician.id,
+            dayOfWeek: d.dayOfWeek,
+          },
+        },
+      });
+
+      if (findSlot) {
+        return prisma.availabilitySlots.update({
+          where: {
+            id: findSlot.id,
+          },
+          data: {
+            dayOfWeek: d.dayOfWeek,
+            startTime: d.startTime,
+            endTime: d.endTime,
+          },
+        });
+      }
+
+      return prisma.availabilitySlots.create({
+        data: {
+          dayOfWeek: d.dayOfWeek,
+          startTime: d.startTime,
+          endTime: d.endTime,
+          technicianId: technician.id,
+        },
+      });
+    }),
+  );
+
+  // 4. Now the database contains the new data
+  const result = await prisma.availabilitySlots.findMany({
+    where: {
+      technicianId: technician.id,
+    },
+  });
+
+  return result;
+};
 
 const updateTechnicianAvailabilitySlotsDB = async (
+  id: string,
   userId: string,
-  payload: IUpdateTechnicianAvailabilitySlots,
+  payload: IAvailabilitySlot,
 ) => {
   const technician = await prisma.technicianProfile.findUniqueOrThrow({
     where: { userId: userId },
   });
 
-  // await prisma.$transaction(async (tx) => {
-  //   await tx.availabilitySlots.deleteMany({
-  //     where: { technicianId: technician.id },
-  //   });
-
-  //   await tx.availabilitySlots.createMany({
-  //     data: payload.availability.map((i) => ({
-  //       technicianId: technician.id,
-  //       dayOfWeek: i.dayOfWeek,
-  //       startTime: i.startTime,
-  //       endTime: i.endTime,
-  //     })),
-  //   });
-  // });
-  await prisma.$transaction(async (tx) => {
-    const bookedSlots = await tx.availabilitySlots.findMany({
-      where: {
-        technicianId: technician.id,
-        bookings: {
-          some: {},
-        },
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    await tx.availabilitySlots.deleteMany({
-      where: {
-        technicianId: technician.id,
-        id: {
-          notIn: bookedSlots.map((slot) => slot.id),
-        },
-      },
-    });
-
-    await tx.availabilitySlots.createMany({
-      data: payload.availability.map((item) => ({
-        technicianId: technician.id,
-        dayOfWeek: item.dayOfWeek,
-        startTime: item.startTime,
-        endTime: item.endTime,
-      })),
-    });
-  });
-
-  return prisma.availabilitySlots.findMany({
+  const bookedSlots = await prisma.availabilitySlots.findUniqueOrThrow({
     where: {
+      id,
       technicianId: technician.id,
     },
-    orderBy: { dayOfWeek: "asc" },
   });
+
+  const result = await prisma.availabilitySlots.update({
+    where: {
+      id: bookedSlots.id,
+    },
+    data: {
+      startTime: payload.startTime,
+      endTime: payload.endTime,
+    },
+  });
+
+  return result;
 };
 
 const getAllTechnicians = async (query: IGetAllTechnicianQuery) => {
@@ -153,7 +196,7 @@ const getAllTechnicians = async (query: IGetAllTechnicianQuery) => {
     andConditions.push({
       user: {
         name: {
-          equals: String(location),
+          equals: String(name),
           mode: "insensitive",
         },
       },
@@ -309,7 +352,7 @@ const updateBookingStatus = async (
 ) => {
   const { status } = payload;
 
-  if (status !== (BookingStatus.ACCEPTED || BookingStatus.DECLINED)) {
+  if (status !== BookingStatus.ACCEPTED && status !== BookingStatus.DECLINED) {
     throw new Error("Only ACCEPTED and DECLINED are allowed.");
   }
 
@@ -351,6 +394,45 @@ const updateBookingStatus = async (
   return result;
 };
 
+const startJob = async (bookingId: string, userId: string) => {
+  const technician = await prisma.technicianProfile.findUniqueOrThrow({
+    where: {
+      userId,
+    },
+  });
+
+  const booking = await prisma.booking.findUnique({
+    where: {
+      id: bookingId,
+      technicianId: technician.id,
+    },
+  });
+
+  if (!booking) {
+    throw new Error("booking not found by id and userProfile");
+  }
+
+  if (booking.status !== BookingStatus.PAID) {
+    throw new Error("Booking has to be paid to start working");
+  }
+
+  const result = await prisma.booking.update({
+    where: {
+      id: bookingId,
+    },
+    data: {
+      status: BookingStatus.IN_PROGRESS,
+    },
+    include: {
+      customerProfile: true,
+      technicianProfile: true,
+      service: true,
+    },
+  });
+
+  return result;
+};
+
 const completeBookingStatus = async (bookingId: string, userId: string) => {
   const technician = await prisma.technicianProfile.findUniqueOrThrow({
     where: {
@@ -369,8 +451,8 @@ const completeBookingStatus = async (bookingId: string, userId: string) => {
     throw new Error("booking not found by id and userProfile");
   }
 
-  if (!(booking.status === (BookingStatus.IN_PROGRESS || BookingStatus.PAID))) {
-    throw new Error(`Booking is already ${booking.status.toLowerCase()}`);
+  if (booking.status !== BookingStatus.IN_PROGRESS) {
+    throw new Error(`Booking status is ${booking.status}`);
   }
 
   const result = await prisma.booking.update({
@@ -392,10 +474,12 @@ const completeBookingStatus = async (bookingId: string, userId: string) => {
 
 export const technicianServices = {
   updateTechnicianProfileDB,
+  createAvailabilitySlotsDB,
   updateTechnicianAvailabilitySlotsDB,
   getAllTechnicians,
   getSingleTechnician,
   getTechnicianBookings,
   updateBookingStatus,
+  startJob,
   completeBookingStatus,
 };

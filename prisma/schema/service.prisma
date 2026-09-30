@@ -2,6 +2,8 @@ model Service {
   id String @id @default(uuid())
 
   name String
+  thumbnail String?
+  duration Int?
   description String?
   price Int
 

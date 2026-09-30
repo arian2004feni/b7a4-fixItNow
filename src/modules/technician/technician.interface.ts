@@ -31,7 +31,7 @@ export interface IGetAllTechnicianQuery {
   searchTerm?: string;
 }
 
-export interface IUpdateTechnicianAvailabilitySlots {
+export interface ICreateTechnicianAvailabilitySlots {
   availability: IAvailabilitySlot[];
 }
 

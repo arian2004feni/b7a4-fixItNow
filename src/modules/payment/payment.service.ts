@@ -1,3 +1,4 @@
+import Stripe from "stripe";
 import { BookingStatus, PaymentStatus } from "../../../generated/prisma/enums";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
@@ -46,8 +47,8 @@ const createPayment = async (
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     metadata: { bookingId },
-    success_url: "http://localhost:3000/api/payments/success",
-    cancel_url: "http://localhost:3000/api/payments/cancel",
+    success_url: `http://localhost:3000/payment/success?booking=${booking.id}`,
+    cancel_url: `http://localhost:3000/payment/cancel?booking=${booking.id}`,
     line_items: [
       {
         quantity: 1,
@@ -77,7 +78,7 @@ const createPayment = async (
     },
   });
 
-  return { checkOutUrl: session.url };
+  return { checkoutUrl: session.url };
 };
 
 const handleWebhook = async (payload: Buffer, signature: string) => {
@@ -88,23 +89,40 @@ const handleWebhook = async (payload: Buffer, signature: string) => {
     signature,
     endpointSecret,
   );
-  const session = event.data.object as {
-    id: string;
-    metadata?: { bookingId?: string };
-  };
+  const session = event.data.object as Stripe.Checkout.Session;
   const bookingId = session.metadata?.bookingId;
 
+  // if (bookingId) {
+  //   if (event.type === "checkout.session.completed") {
+  //     await handleCheckoutCompleted(event.data.object);
+  //   } else if (
+  //     event.type === "checkout.session.expired" ||
+  //     event.type === "checkout.session.async_payment_failed"
+  //   ) {
+  //     await prisma.payment.updateMany({
+  //       where: { bookingId, status: PaymentStatus.PENDING },
+  //       data: { status: PaymentStatus.FAILED },
+  //     });
+  //   }
+  // }
   if (bookingId) {
-    if (event.type === "checkout.session.completed") {
-      await handleCheckoutCompleted(event.data.object);
-    } else if (
-      event.type === "checkout.session.expired" ||
-      event.type === "checkout.session.async_payment_failed"
-    ) {
-      await prisma.payment.updateMany({
-        where: { bookingId, status: PaymentStatus.PENDING },
-        data: { status: PaymentStatus.FAILED },
-      });
+    switch (event.type) {
+      case "checkout.session.completed":
+        await handleCheckoutCompleted(
+          event.data.object as Stripe.Checkout.Session,
+        );
+        break;
+
+      case "checkout.session.expired":
+      case "checkout.session.async_payment_failed":
+        await prisma.payment.updateMany({
+          where: { bookingId, status: PaymentStatus.PENDING },
+          data: { status: PaymentStatus.FAILED },
+        });
+        break;
+
+      default:
+        console.log(`Unhandled Stripe event: ${event.type}`);
     }
   }
 
@@ -123,10 +141,11 @@ const getAllUsersPayments = async (userId: string) => {
     },
     include: {
       bookings: {
-        select: {
-          service: {
-            select: {
-              price: true,
+        include: {
+          service: true,
+          technicianProfile: {
+            include: {
+              user: true,
             },
           },
         },
@@ -140,16 +159,24 @@ const getAllUsersPayments = async (userId: string) => {
 const getPaymentDetails = async (id: string) => {
   const payment = await prisma.payment.findUniqueOrThrow({
     where: {
-      id,
+      bookingId: id,
     },
     include: {
       bookings: {
         include: {
           timeSlot: true,
-          customerProfile: true,
+          customerProfile: {
+            include: {
+              user: true,
+            },
+          },
           service: {
             include: {
-              technician: true,
+              technician: {
+                include: {
+                  user: true,
+                },
+              },
             },
           },
         },
