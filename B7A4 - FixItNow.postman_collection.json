@@ -45,7 +45,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"technician3@fixitnow.com\",\r\n    \"password\": \"12346\"\r\n}",
+              "raw": "{\r\n    \"email\": \"admin@fixitnow.com\",\r\n    \"password\": \"admin@fixitnow12346\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -61,6 +61,34 @@
                 "api",
                 "auth",
                 "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "refresh-token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin@fixitnow.com\",\r\n    \"password\": \"admin@fixitnow12346\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base-url}}/api/auth/refresh-token",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh-token"
               ]
             }
           },
@@ -122,7 +150,7 @@
                 },
                 {
                   "key": "page",
-                  "value": "2",
+                  "value": "1",
                   "disabled": true
                 },
                 {
@@ -132,7 +160,7 @@
                 },
                 {
                   "key": "location",
-                  "value": "Dhaka",
+                  "value": "string",
                   "disabled": true
                 },
                 {
@@ -158,6 +186,12 @@
                 {
                   "key": "sortOrder",
                   "value": "desc",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "plumbing",
+                  "type": "text",
                   "disabled": true
                 }
               ]
@@ -300,7 +334,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "06130fcf-4cda-4313-a693-79aadb1137cb"
+                  "value": "8dbebfb7-436e-427d-aa4f-7bcc29481c36"
                 }
               ]
             }
@@ -346,7 +380,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"status\": \"ACCEPTED\"\r\n}",
+              "raw": "{\r\n  \"status\": \"DECLINED\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -397,6 +431,42 @@
                 "api",
                 "technician",
                 "complete",
+                "bookings",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "848ae409-4d9c-40f9-b677-884c875675fa"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "start job",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"COMPLETED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base-url}}/api/technician/start/bookings/:id",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "technician",
+                "start",
                 "bookings",
                 ":id"
               ],
@@ -513,6 +583,32 @@
           "response": []
         },
         {
+          "name": "get admin stats",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base-url}}/api/admin/stats",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "stats"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "get all bookings",
           "request": {
             "method": "GET",
@@ -526,6 +622,28 @@
                 "api",
                 "admin",
                 "bookings"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "REQUESTED",
+                  "disabled": true
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "painting",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                }
               ]
             }
           },
@@ -545,6 +663,38 @@
                 "api",
                 "admin",
                 "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "role",
+                  "value": "TECHNICIAN",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "name",
+                  "disabled": true
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "disabled": true
+                }
               ]
             }
           },
@@ -620,7 +770,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"name\": \"AC Repair and Upgrades\",\r\n  \"description\": \"acacac repup\",\r\n  \"price\": 1200,\r\n  \"category\": \"fix and upgrade\"\r\n}",
+              "raw": "{\r\n  \"name\": \"Emergency Plumbing\",\r\n  \"description\": \"An Emergency Plumbing Service provides fast, 24/7 priority response to fix critical plumbing failures that risk immediate property damage, flooding, or health hazards.\",\r\n  \"price\": 1200,\r\n  \"category\": \"plumbing\",\r\n  \"thumbnail\": \"https://images.unsplash.com/photo-1585704032915-c3400ca199e7?auto=format&fit=crop&w=900&q=80\",\r\n  \"duration\": 1\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -635,6 +785,74 @@
               "path": [
                 "api",
                 "services"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update service",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Emergency Plumbing\",\r\n  \"description\": \"An Emergency Plumbing Service provides fast, 24/7 priority response to fix critical plumbing failures that risk immediate property damage, flooding, or health hazards.\",\r\n  \"price\": 200\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base-url}}/api/services/:id",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "services",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "3e6da722-344d-4ef3-b6c3-2691c69c9e85"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete service",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base-url}}/api/services/:id",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "services",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "3e6da722-344d-4ef3-b6c3-2691c69c9e85"
+                }
               ]
             }
           },
@@ -671,11 +889,46 @@
         {
           "name": "update technician availability slots",
           "request": {
-            "method": "PUT",
+            "method": "PATCH",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"availability\": [\r\n    {\r\n      \"dayOfWeek\": \"50\",\r\n      \"startTime\": \"09:00\",\r\n      \"endTime\": \"18:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"WEDNESDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"THURSDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"FRIDAY\",\r\n      \"startTime\": \"09:00\",\r\n      \"endTime\": \"13:00\"\r\n    }\r\n  ]\r\n}",
+              "raw": "{\r\n    \"startTime\": \"09:00\",\r\n    \"endTime\": \"18:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base-url}}/api/technician/availability/:id",
+              "host": [
+                "{{base-url}}"
+              ],
+              "path": [
+                "api",
+                "technician",
+                "availability",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "b1fcc58c-0fa7-4882-90f9-56fb76a6e4b1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create technician availability",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"availability\": [\r\n    {\r\n      \"dayOfWeek\": \"SATURDAY\",\r\n      \"startTime\": \"\",\r\n      \"endTime\": \"\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"SUNDAY\",\r\n      \"startTime\": \"\",\r\n      \"endTime\": \"\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"MONDAY\",\r\n      \"startTime\": \"\",\r\n      \"endTime\": \"\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"TUESDAY\",\r\n      \"startTime\": \"\",\r\n      \"endTime\": \"\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"WEDNESDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"THURSDAY\",\r\n      \"startTime\": \"10:00\",\r\n      \"endTime\": \"17:00\"\r\n    },\r\n    {\r\n      \"dayOfWeek\": \"FRIDAY\",\r\n      \"startTime\": \"09:00\",\r\n      \"endTime\": \"13:00\"\r\n    }\r\n  ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -793,6 +1046,35 @@
           "response": []
         }
       ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "value": ""
     }
   ]
 }

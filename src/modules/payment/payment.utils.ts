@@ -45,6 +45,7 @@ export const handleCheckoutCompleted = async (
         data: {
           status: PaymentStatus.SUCCEEDED,
           transactionId: session.id,
+          paidAt: new Date(),
         },
       }),
 

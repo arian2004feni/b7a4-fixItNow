@@ -47,8 +47,8 @@ const createPayment = async (
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     metadata: { bookingId },
-    success_url: `http://localhost:3000/payment/success?booking=${booking.id}`,
-    cancel_url: `http://localhost:3000/payment/cancel?booking=${booking.id}`,
+    success_url: `${config.frontend_url}/payment/success?booking=${booking.id}`,
+    cancel_url: `${config.frontend_url}/payment/cancel?booking=${booking.id}`,
     line_items: [
       {
         quantity: 1,
@@ -71,10 +71,16 @@ const createPayment = async (
     create: {
       transactionId: session.id,
       bookingId: booking.id,
+      amount: booking.service.price,
+      provider: "STRIPE",
+      status: "PENDING",
     },
     update: {
       transactionId: session.id,
+      amount: booking.service.price,
+      provider: "STRIPE",
       status: "PENDING",
+      paidAt: null,
     },
   });
 

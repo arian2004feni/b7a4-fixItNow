@@ -311,6 +311,8 @@ const getSingleTechnician = async (id: string) => {
       availabilitySlots: true,
       reviewsReceived: true,
       services: true,
+      user: true,
+      bookings: true,
     },
   });
 

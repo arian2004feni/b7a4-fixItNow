@@ -97,6 +97,8 @@ const getAllService = async (query: IGetServicesQuery) => {
     location,
     maxPrice,
     minPrice,
+    category,
+    minRating,
     page = 1,
     searchTerm,
     sortBy = "createdAt",
@@ -133,6 +135,31 @@ const getAllService = async (query: IGetServicesQuery) => {
       technician: {
         location: {
           contains: String(location),
+          mode: "insensitive",
+        },
+      },
+    });
+  }
+
+  if (minRating) {
+    andConditions.push({
+      technician: {
+        reviewsReceived: {
+          some: {
+            rating: {
+              gte: Number(minRating),
+            },
+          },
+        },
+      },
+    });
+  }
+
+  if (category) {
+    andConditions.push({
+      category: {
+        name: {
+          contains: String(category),
           mode: "insensitive",
         },
       },

@@ -5,10 +5,19 @@ model Payment {
   bookings Booking @relation(fields: [bookingId], references: [id])
 
   status PaymentStatus @default(PENDING)
+
   transactionId String @unique
+
+  amount Int
+  provider PaymentProvider @default(STRIPE)
+
+  paidAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
 
   @@map("payments")
 }
